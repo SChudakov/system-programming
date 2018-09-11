@@ -3,6 +3,7 @@ package com.sschudakov;
 import org.apache.commons.cli.*;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Set;
 
@@ -29,6 +30,8 @@ public class Main {
             }
         } catch (ParseException | FileNotFoundException e) {
             System.out.println(e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
