@@ -4,8 +4,7 @@ import org.apache.commons.cli.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.util.Set;
+import java.util.List;
 
 public class Main {
     private static final String COMMAND_LINE_SYNTAX = "counter";
@@ -23,7 +22,7 @@ public class Main {
             if (commandLine.hasOption(FILE_OPTION_NAME)) {
                 String filePath = commandLine.getOptionValue(FILE_OPTION_NAME);
                 MaxLengthWords maxLengthWords = new MaxLengthWords();
-                Set<String> longestWords = maxLengthWords.wordsWithMaxLength(filePath);
+                List<String> longestWords = maxLengthWords.wordsWithMaxLength(filePath);
                 longestWords.forEach(System.out::println);
             } else {
                 formatter.printHelp(COMMAND_LINE_SYNTAX, options);
