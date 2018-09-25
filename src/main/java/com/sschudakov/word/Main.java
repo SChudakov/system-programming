@@ -1,4 +1,4 @@
-package com.sschudakov;
+package com.sschudakov.word;
 
 import org.apache.commons.cli.*;
 

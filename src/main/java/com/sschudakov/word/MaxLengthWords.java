@@ -1,4 +1,4 @@
-package com.sschudakov;
+package com.sschudakov.word;
 
 import java.io.BufferedReader;
 import java.io.File;
