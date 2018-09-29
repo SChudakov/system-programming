@@ -1,6 +1,5 @@
 package com.sschudakov.automaton;
 
-import org.jgrapht.Graphs;
 import org.jgrapht.graph.DirectedPseudograph;
 
 import java.io.File;
@@ -19,17 +18,16 @@ public class CSVAutomatonImporter implements AutomatonImporter {
         DirectedPseudograph<AutomatonState, AutomatonEdge> automatonGraph
                 = new DirectedPseudograph<>(AutomatonEdge.class);
 
-        try (Scanner scanner = new Scanner(file)) {
-            int alphabetSize = readAlphabetSize(scanner);
-            int statesSetSize = readStatesSetSize(scanner);
-            int initialState = readInitialState(scanner);
-            Set<Integer> finalStates = readFinalStates(scanner);
-            addTransitions(scanner, automatonGraph, finalStates);
+        Scanner scanner = new Scanner(file);
+        int alphabetSize = readAlphabetSize(scanner);
+        int statesSetSize = readStatesSetSize(scanner);
+        int initialStateIndex = readInitialState(scanner);
+        Set<Integer> finalStates = readFinalStates(scanner);
+        addTransitions(scanner, automatonGraph, finalStates);
 
-            return new Automaton(automatonGraph, initialState);
-        } catch (Exception e) {
-            throw new RuntimeException("Illegal automaton format", e);
-        }
+        AutomatonState initialState = new AutomatonState(initialStateIndex, finalStates.contains(initialStateIndex));
+
+        return new Automaton(automatonGraph, initialState);
     }
 
     private int readAlphabetSize(Scanner scanner) {
@@ -48,17 +46,30 @@ public class CSVAutomatonImporter implements AutomatonImporter {
         return Arrays.stream(scanner.nextLine().split(WHITESPACE_REGEXP)).map(Integer::valueOf).collect(Collectors.toCollection(HashSet::new));
     }
 
-    private void addTransitions(Scanner scanner, DirectedPseudograph<AutomatonState, AutomatonEdge> automaton, Set<Integer> finalStates) {
+    private void addTransitions(Scanner scanner, DirectedPseudograph<AutomatonState, AutomatonEdge> automatonGraph, Set<Integer> finalStates) {
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] parts = line.split(WHITESPACE_REGEXP);
-            int beginStateIndex = Integer.valueOf(parts[0]);
-            AutomatonState beginState = new AutomatonState(beginStateIndex, finalStates.contains(beginStateIndex));
-            String symbol = parts[1];
-            int targetStateIndex = Integer.valueOf(parts[2]);
-            AutomatonState targetState = new AutomatonState(beginStateIndex, finalStates.contains(targetStateIndex));
-            Graphs.addEdgeWithVertices(automaton, beginState, targetState);
-            automaton.getEdge(beginState, targetState).setSymbol(symbol);
+            int sourceStateIndex;
+            String symbol;
+            int targetStateIndex;
+
+            if (parts.length == 3) {
+                sourceStateIndex = Integer.valueOf(parts[0]);
+                symbol = parts[1];
+                targetStateIndex = Integer.valueOf(parts[2]);
+            } else {
+                sourceStateIndex = Integer.valueOf(parts[0]);
+                symbol = "";
+                targetStateIndex = Integer.valueOf(parts[1]);
+            }
+
+            AutomatonState sourceState = new AutomatonState(sourceStateIndex, finalStates.contains(sourceStateIndex));
+            AutomatonState targetState = new AutomatonState(targetStateIndex, finalStates.contains(targetStateIndex));
+
+            automatonGraph.addVertex(sourceState);
+            automatonGraph.addVertex(targetState);
+            automatonGraph.addEdge(sourceState, targetState, new AutomatonEdge(symbol));
         }
     }
 }
