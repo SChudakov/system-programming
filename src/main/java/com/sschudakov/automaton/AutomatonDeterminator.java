@@ -15,35 +15,17 @@ public class AutomatonDeterminator {
         if (isDeterministic(automaton)) {
             return automaton;
         } else {
-            Automaton copy = copyAutomaton(automaton);
-//            System.out.println("copy: " + copy);
+            Automaton copy = Util.copyAutomaton(automaton);
             removeLambdaTransition(copy);
-//            System.out.println("removed lambda transition: " + copy);
             return deterministicAutomaton(copy);
         }
-    }
-
-    private Automaton copyAutomaton(Automaton automaton) {
-        DirectedPseudograph<AutomatonState, AutomatonEdge> graph = automaton.getAutomatonGraph();
-        AutomatonState initialState = automaton.getInitialState();
-
-        DirectedPseudograph<AutomatonState, AutomatonEdge> graphCopy = new DirectedPseudograph<>(AutomatonEdge.class);
-        for (AutomatonState state : graph.vertexSet()) {
-            graphCopy.addVertex(new AutomatonState(state.getIndex(), state.isFinalState()));
-        }
-        for (AutomatonEdge edge : graph.edgeSet()) {
-            AutomatonState source = graph.getEdgeSource(edge);
-            AutomatonState target = graph.getEdgeTarget(edge);
-            graphCopy.addEdge(source, target, new AutomatonEdge(edge.getSymbol()));
-        }
-        return new Automaton(graphCopy, new AutomatonState(initialState.getIndex(), initialState.isFinalState()));
     }
 
     private boolean isDeterministic(Automaton automaton) {
         DirectedPseudograph<AutomatonState, AutomatonEdge> automatonGraph = automaton.getAutomatonGraph();
         for (AutomatonState state : automatonGraph.vertexSet()) {
             Map<String, Long> grouped = automatonGraph.outgoingEdgesOf(state).stream().collect(Collectors.groupingBy(AutomatonEdge::getSymbol, Collectors.counting()));
-            if (!grouped.values().stream().filter(value -> value > 0).collect(Collectors.toList()).isEmpty()) {
+            if (!grouped.values().stream().filter(value -> value > 1).collect(Collectors.toList()).isEmpty()) {
                 return false;
             }
         }
@@ -53,10 +35,7 @@ public class AutomatonDeterminator {
     private Automaton deterministicAutomaton(Automaton automaton) {
         Set<Set<AutomatonState>> subsets = allSubsets(automaton.getAutomatonGraph().vertexSet().toArray());
 
-        Set<AutomatonState> finalStates = automaton.getAutomatonGraph().vertexSet().stream()
-                .filter(AutomatonState::isFinalState).collect(Collectors.toSet());
-        Set<String> alphabet = automaton.getAutomatonGraph().edgeSet().stream()
-                .map(AutomatonEdge::getSymbol).collect(Collectors.toSet());
+        Set<AutomatonState> finalStates = automaton.finalStates();
 
         Map<Set<AutomatonState>, AutomatonState> subsetToStateMap = new HashMap<>();
         DirectedPseudograph<AutomatonState, AutomatonEdge> deterministicAutomatonGraph =
@@ -123,16 +102,6 @@ public class AutomatonDeterminator {
         Set<AutomatonEdge> lambdaTransitions = automatonGraph.edgeSet().stream()
                 .filter(a -> a.getSymbol().equals(LAMBDA)).collect(Collectors.toSet());
 
-        /*Set<AutomatonState> uniqueTargets = new HashSet<>();
-        Iterator<AutomatonEdge> iterator = lambdaTransitions.iterator();
-        while (iterator.hasNext()) {
-            AutomatonEdge edge = iterator.next();
-            if (uniqueTargets.contains(automatonGraph.getEdgeTarget(edge))) {
-                iterator.remove();
-            } else {
-                uniqueTargets.add(automatonGraph.getEdgeTarget(edge));
-            }
-        }*/
         Set<AutomatonState> statesTobeRemoved = lambdaTransitions.stream().map(automatonGraph::getEdgeTarget).collect(Collectors.toSet())
                 .stream().filter(target -> hasOnlyLambdaTransition(automatonGraph, target)).collect(Collectors.toSet());
 

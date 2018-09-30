@@ -1,17 +1,29 @@
 package com.sschudakov.automaton;
 
-import org.jgrapht.Graphs;
-import org.jgrapht.graph.DirectedPseudograph;
+import java.io.FileNotFoundException;
 
 public class Main {
     public static void main(String[] args) {
-        DirectedPseudograph<AutomatonState, AutomatonEdge> pseudograph = new DirectedPseudograph<>(AutomatonEdge.class);
-        AutomatonState state_1 = new AutomatonState(1, false);
-        AutomatonState state_2 = new AutomatonState(2, false);
-        pseudograph.addVertex(state_1);
-        pseudograph.addVertex(state_2);
-        pseudograph.addEdge(state_1, state_2, new AutomatonEdge("s"));
-        pseudograph.addEdge(state_1, state_2, new AutomatonEdge("t"));
-        System.out.println(pseudograph);
+        CSVAutomatonImporter importer = new CSVAutomatonImporter();
+        AutomatonDeterminator determinator = new AutomatonDeterminator();
+        AutomatonUnifier unifier = new AutomatonUnifier();
+        AutomatonMinimizer minimizer = new AutomatonMinimizer();
+        try {
+            Automaton automaton = importer.importAutomaton(
+                    "C:\\Users\\Semen\\D\\workspace.java\\system-programming\\src\\main\\resources\\automaton\\det_min_1.txt");
+            System.out.println("imported: " + automaton);
+
+            Automaton determined = determinator.determinate(automaton);
+            System.out.println("determined: " + determined);
+
+            Automaton unified = unifier.unifySymbols(determined);
+            System.out.println("unified: " + unified);
+
+            Automaton minimized = minimizer.minimize(unified);
+            System.out.println("minimized: " + minimized);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -3,7 +3,9 @@ package com.sschudakov.automaton;
 import org.jgrapht.graph.DirectedPseudograph;
 
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Automaton {
@@ -22,6 +24,21 @@ public class Automaton {
 
     public AutomatonState getInitialState() {
         return initialState;
+    }
+
+    public Set<AutomatonState> finalStates() {
+        return automatonGraph.vertexSet().stream().filter(AutomatonState::isFinalState).collect(Collectors.toSet());
+    }
+
+    public Set<AutomatonState> notFinalStates() {
+        Set<AutomatonState> result = new HashSet<>(automatonGraph.vertexSet());
+        result.removeAll(finalStates());
+        return result;
+    }
+
+    public Set<String> alphabet() {
+        return automatonGraph.edgeSet().stream()
+                .map(AutomatonEdge::getSymbol).collect(Collectors.toSet());
     }
 
     @Override
