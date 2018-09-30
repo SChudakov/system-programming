@@ -16,7 +16,7 @@ public class AutomatonMinimizer {
         removeUnreachableStates(copy);
         removeDeadEndStates(copy);
         Set<Set<AutomatonState>> equivalentStates = equivalentStates(copy);
-        mergeEquivalentStates(copy.getAutomatonGraph(), equivalentStates);
+        mergeEquivalentStates(copy, equivalentStates);
         return copy;
     }
 
@@ -33,7 +33,7 @@ public class AutomatonMinimizer {
 
         Set<AutomatonState> unreachableState = new HashSet<>(pseudograph.vertexSet());
         unreachableState.removeAll(reachableStates);
-
+        System.out.println("unreachable states: " + unreachableState);
         for (AutomatonState state : unreachableState) {
             pseudograph.removeVertex(state);
         }
@@ -55,7 +55,7 @@ public class AutomatonMinimizer {
 
         Set<AutomatonState> deadEndStates = new HashSet<>(pseudograph.vertexSet());
         deadEndStates.removeAll(nonDeadEndStates);
-
+        System.out.println("dead end states: " + deadEndStates);
         for (AutomatonState state : deadEndStates) {
             pseudograph.removeVertex(state);
         }
@@ -142,17 +142,18 @@ public class AutomatonMinimizer {
         return Pair.of(withTransitionToC, noTransitionToC);
     }
 
-    private void mergeEquivalentStates(DirectedPseudograph<AutomatonState, AutomatonEdge> graph,
-                                       Set<Set<AutomatonState>> equivalentStates) {
+    private void mergeEquivalentStates(Automaton automaton, Set<Set<AutomatonState>> equivalentStates) {
         for (Set<AutomatonState> equivalentState : equivalentStates) {
             if (equivalentState.size() > 1) {
-                mergeStates(graph, equivalentState);
+                mergeStates(automaton, equivalentState);
             }
         }
     }
 
-    private void mergeStates(DirectedPseudograph<AutomatonState, AutomatonEdge> graph,
+    private void mergeStates(Automaton automaton,
                              Set<AutomatonState> states) {
+        DirectedPseudograph<AutomatonState, AutomatonEdge> graph = automaton.getAutomatonGraph();
+
         Set<Pair<AutomatonState, String>> incomingTransition = new HashSet<>();
         Set<Pair<AutomatonState, String>> outgoingTransitions = new HashSet<>();
         Set<Pair<AutomatonState, String>> outgoingInternalTransitions = new HashSet<>();
@@ -191,6 +192,10 @@ public class AutomatonMinimizer {
         }
         for (Pair<AutomatonState, String> transition : outgoingInternalTransitions) {
             graph.addEdge(mergedState, mergedState, new AutomatonEdge(transition.getSecond()));
+        }
+
+        if (states.contains(automaton.getInitialState())) {
+            automaton.setInitialState(mergedState);
         }
     }
 }

@@ -26,6 +26,10 @@ public class Automaton {
         return initialState;
     }
 
+    public void setInitialState(AutomatonState initialState) {
+        this.initialState = initialState;
+    }
+
     public Set<AutomatonState> finalStates() {
         return automatonGraph.vertexSet().stream().filter(AutomatonState::isFinalState).collect(Collectors.toSet());
     }
