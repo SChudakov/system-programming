@@ -23,6 +23,8 @@ public class CSVAutomatonImporter implements AutomatonImporter {
         int statesSetSize = readStatesSetSize(scanner);
         int initialStateIndex = readInitialState(scanner);
         Set<Integer> finalStates = readFinalStates(scanner);
+
+        addStates(automatonGraph, statesSetSize, finalStates);
         addTransitions(scanner, automatonGraph, finalStates);
 
         AutomatonState initialState = new AutomatonState(initialStateIndex, finalStates.contains(initialStateIndex));
@@ -45,6 +47,13 @@ public class CSVAutomatonImporter implements AutomatonImporter {
     private Set<Integer> readFinalStates(Scanner scanner) {
         return Arrays.stream(scanner.nextLine().split(WHITESPACE_REGEXP)).map(Integer::valueOf).collect(Collectors.toCollection(HashSet::new));
     }
+
+    private void addStates(DirectedPseudograph<AutomatonState, AutomatonEdge> automatonGraph, int statesSetSize, Set<Integer> finalStates) {
+        for (int i = 0; i < statesSetSize; i++) {
+            automatonGraph.addVertex(new AutomatonState(i, finalStates.contains(i)));
+        }
+    }
+
 
     private void addTransitions(Scanner scanner, DirectedPseudograph<AutomatonState, AutomatonEdge> automatonGraph, Set<Integer> finalStates) {
         while (scanner.hasNextLine()) {

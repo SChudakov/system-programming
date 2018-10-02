@@ -34,13 +34,18 @@ public class OddWordsRecognition {
 
         for (List<AutomatonState> cycle : cyclesOfLengthTwo) {
             if (cycle.get(0).isFinalState()) {
-                if (containsPathOfFinalStates(automaton, cycle.get(0))) {
-                    return true;
+                if (!automaton.getInitialState().equals(cycle.get(0))) {
+                    if (containsPathOfFinalStates(automaton, cycle.get(0))) {
+                        return true;
+                    }
                 }
+
             }
             if (cycle.get(1).isFinalState()) {
-                if (containsPathOfFinalStates(automaton, cycle.get(1))) {
-                    return true;
+                if (!automaton.getInitialState().equals(cycle.get(1))) {
+                    if (containsPathOfFinalStates(automaton, cycle.get(1))) {
+                        return true;
+                    }
                 }
             }
         }

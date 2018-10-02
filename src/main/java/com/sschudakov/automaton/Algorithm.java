@@ -4,6 +4,7 @@ public class Algorithm {
     private AutomatonDeterminator determinator = new AutomatonDeterminator();
     private AutomatonUnifier unifier = new AutomatonUnifier();
     private AutomatonMinimizer minimizer = new AutomatonMinimizer();
+    private OddWordsRecognition recognition = new OddWordsRecognition();
 
 
     public boolean execute(Automaton automaton) {
@@ -16,7 +17,6 @@ public class Algorithm {
         Automaton minimized = minimizer.minimize(unified);
         System.out.println("minimized: " + minimized);
 
-        OddWordsRecognition recognition = new OddWordsRecognition();
         return recognition.recognizes(minimized);
     }
 }
