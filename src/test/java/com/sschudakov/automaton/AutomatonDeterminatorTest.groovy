@@ -1,5 +1,8 @@
 package com.sschudakov.automaton
 
+import com.sschudakov.automaton.algorithm.AutomatonDeterminator
+import com.sschudakov.automaton.io.AutomatonImporter
+import com.sschudakov.automaton.io.CSVAutomatonImporter
 import spock.lang.Specification
 
 class AutomatonDeterminatorTest extends Specification {

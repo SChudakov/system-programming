@@ -1,5 +1,8 @@
-package com.sschudakov.automaton;
+package com.sschudakov.automaton.io;
 
+import com.sschudakov.automaton.Automaton;
+import com.sschudakov.automaton.AutomatonEdge;
+import com.sschudakov.automaton.AutomatonState;
 import org.jgrapht.graph.DirectedPseudograph;
 
 import java.io.File;

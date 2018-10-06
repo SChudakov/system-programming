@@ -1,5 +1,8 @@
-package com.sschudakov.automaton;
+package com.sschudakov.automaton.algorithm;
 
+import com.sschudakov.automaton.Automaton;
+import com.sschudakov.automaton.AutomatonEdge;
+import com.sschudakov.automaton.AutomatonState;
 import org.jgrapht.graph.DirectedPseudograph;
 
 public class AutomatonUnifier {

@@ -1,5 +1,7 @@
 package com.sschudakov.automaton
 
+import com.sschudakov.automaton.algorithm.AutomatonMinimizer
+import com.sschudakov.automaton.io.CSVAutomatonImporter
 import spock.lang.Specification
 
 class AutomatonMinimizerTest extends Specification {

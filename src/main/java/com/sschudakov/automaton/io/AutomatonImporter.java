@@ -1,4 +1,6 @@
-package com.sschudakov.automaton;
+package com.sschudakov.automaton.io;
+
+import com.sschudakov.automaton.Automaton;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -1,4 +1,6 @@
-package com.sschudakov.automaton;
+package com.sschudakov.automaton.algorithm;
+
+import com.sschudakov.automaton.Automaton;
 
 public class Algorithm {
     private AutomatonDeterminator determinator = new AutomatonDeterminator();

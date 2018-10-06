@@ -1,4 +1,8 @@
-package com.sschudakov.automaton;
+package com.sschudakov.automaton.main;
+
+import com.sschudakov.automaton.Automaton;
+import com.sschudakov.automaton.algorithm.Algorithm;
+import com.sschudakov.automaton.io.CSVAutomatonImporter;
 
 import java.io.FileNotFoundException;
 
