@@ -61,27 +61,29 @@ public class CSVAutomatonImporter implements AutomatonImporter {
     private void addTransitions(Scanner scanner, DirectedPseudograph<AutomatonState, AutomatonEdge> automatonGraph, Set<Integer> finalStates) {
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
-            String[] parts = line.split(WHITESPACE_REGEXP);
-            int sourceStateIndex;
-            String symbol;
-            int targetStateIndex;
+            if (!line.trim().equals("")) {
+                String[] parts = line.split(WHITESPACE_REGEXP);
+                int sourceStateIndex;
+                String symbol;
+                int targetStateIndex;
 
-            if (parts.length == 3) {
-                sourceStateIndex = Integer.valueOf(parts[0]);
-                symbol = parts[1];
-                targetStateIndex = Integer.valueOf(parts[2]);
-            } else {
-                sourceStateIndex = Integer.valueOf(parts[0]);
-                symbol = "";
-                targetStateIndex = Integer.valueOf(parts[1]);
+                if (parts.length == 3) {
+                    sourceStateIndex = Integer.valueOf(parts[0]);
+                    symbol = parts[1];
+                    targetStateIndex = Integer.valueOf(parts[2]);
+                } else {
+                    sourceStateIndex = Integer.valueOf(parts[0]);
+                    symbol = "";
+                    targetStateIndex = Integer.valueOf(parts[1]);
+                }
+
+                AutomatonState sourceState = new AutomatonState(sourceStateIndex, finalStates.contains(sourceStateIndex));
+                AutomatonState targetState = new AutomatonState(targetStateIndex, finalStates.contains(targetStateIndex));
+
+                automatonGraph.addVertex(sourceState);
+                automatonGraph.addVertex(targetState);
+                automatonGraph.addEdge(sourceState, targetState, new AutomatonEdge(symbol));
             }
-
-            AutomatonState sourceState = new AutomatonState(sourceStateIndex, finalStates.contains(sourceStateIndex));
-            AutomatonState targetState = new AutomatonState(targetStateIndex, finalStates.contains(targetStateIndex));
-
-            automatonGraph.addVertex(sourceState);
-            automatonGraph.addVertex(targetState);
-            automatonGraph.addEdge(sourceState, targetState, new AutomatonEdge(symbol));
         }
     }
 }
