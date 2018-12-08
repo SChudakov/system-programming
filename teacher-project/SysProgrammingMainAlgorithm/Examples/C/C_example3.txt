@@ -1,0 +1,184 @@
+#include "head.h"
+
+FDat *Add(FDat *posl)
+{
+if (posl == NULL){
+posl = new FDat;
+}
+else { posl->Next = new FDat;
+posl = posl->Next;
+}
+
+cout << "Vvedite - Name, Racsherenie, Daty, Razmer and Attribut: \n";
+cin >> posl->Name >> posl->r >> posl->d >> posl->size >> posl->attr;
+posl->Next = NULL;
+return posl;
+}
+
+FDat *Del(FDat *begin, int &identif )
+{
+FDat *prom, *begin_new, *next;
+int x = 0, j =  0, k = 0, y = 0;
+char name[20];
+
+cout << "Mi udalaem!!! \n";
+
+cout <<"Vvedite NAME : ";
+cin >> name;
+begin_new = prom = next = begin;
+while ( begin != NULL) {
+for (int i = 0; i<strlen(name); i++)
+if (name[i] == begin->Name[i]) j++;
+if (j == strlen(name)) {
+if (prom == begin) {
+begin_new = begin->Next;
+prom = begin->Next;
+delete begin;
+x = 1;
+y = 1;
+begin = prom;
+}
+else {
+while ( k == 0) {
+if (next->Next == begin){
+if (next->Next->Next == NULL) {
+k = 1;
+x = 1;
+delete begin;
+next->Next = NULL;
+begin = NULL;
+identif = 1;
+begin_new = next;
+}
+else {
+prom = begin->Next;
+delete begin;
+x = 1;
+k = 1;
+y = 1;
+next->Next = begin = prom;
+}
+}
+next = next->Next;
+}
+}
+}
+if (y == 1) begin = NULL;
+if (begin != NULL)  begin = begin->Next;
+j = 0;
+}
+if (x == 0)
+cout << "NAME nety ... ";
+getch();
+return begin_new;
+
+}
+
+void Show (FDat *begin)
+{
+cout << "Prosmotr spiska!!! \n";
+cout <<"Name, Racsherenie, Data, Razmer and Attribut\n";
+while ( begin != NULL) {
+cout <<"\n"<< begin->Name <<"."<<begin->r <<" "<<begin->d <<"  "
+<< begin->size <<" byte"<<begin->attr <<" \n ";
+begin = begin->Next;
+}
+getch();
+
+}
+
+void Find (FDat *begin)
+{
+int x = 0, j =  0;
+char name[20];
+cout << "poisk!!! \n";
+cout <<"Vvedite NAME : ";
+cin >> name;
+while ( begin != NULL) {
+for (int i = 0; i<strlen(name); i++)
+if (name[i] == begin->Name[i]) j++;
+
+                                 if (j == strlen(name)) {
+cout <<"\n"<< begin->Name <<"."<<begin->r <<" "<<begin->d <<"  "
+<< begin->size <<" byte"<<begin->attr <<" \n ";
+x = 1;
+j = 0;
+}
+
+begin = begin->Next;
+}
+if (x == 0)
+cout << "NAME nety ... ";
+getch();
+}
+
+void FreeRam (FDat *begin)
+{
+FDat *prom;
+cout << "ochistka!!! \n";
+prom = begin;
+while ( prom != NULL) {
+begin = begin->Next;
+delete prom;
+prom = begin;
+}
+}
+
+////////////////////////////////////////////////////
+
+int main ()
+{
+long int mem;
+FDat *Begin = NULL, *Posl = NULL, *Dopol;
+int ch, iden = 0;               //   наж. клавиша
+
+                mem = farcoreleft(); //     Размер своб. памяти
+cout <<"Memory - "<<mem<<"\n";
+do {
+cout<<" <1> - DOBAVIT ZAPIS \n"
+<<" <2> - UDALIT ZAPIS \n"
+<<" <3> - PROSMOTR SPISKA \n"
+<<" <4> - POISK \n"
+<<" <5> - EXIT \n";
+
+                  cin>>ch;       //  {реализация меню}
+
+                  switch (ch) {
+case 1 :
+cout <<"adress = " <<Begin;
+cout <<"adress = " <<Posl;
+if (Begin == NULL) {
+Begin = Add(Posl);
+Posl = Begin;
+}
+else Posl = Add( Posl);
+cout <<"adress = " <<Begin;
+break;
+case 2 :
+Dopol = Del(Begin, iden);
+if (iden == 0) Begin = Dopol;
+else Posl = Dopol;
+break;
+case 3 :
+Show(Begin);
+break;
+case 4 :
+Find(Begin);
+break;
+}
+} while (ch != 5);
+
+cout <<"\n Memory - " <<farcoreleft()<<"\n";
+
+FreeRam(Begin);           //   очистка памяти
+getch();
+
+cout <<"\n Memory - " <<farcoreleft()<<"\n";
+if (mem == farcoreleft()) cout <<"Pamat' ne poterana ... ";
+else cout << "ERROR!!! Potera Memory!!!";
+
+cout<<" Press key..."<<endl;
+getch();
+
+return 0;
+} 

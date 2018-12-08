@@ -1,0 +1,32 @@
+program prosto_chisla;
+uses crt;
+var n,i,symma,k,pdel:integer;
+    p, Code : Integer;
+    Str: string;
+    yn:string;
+Begin
+clrscr;
+repeat
+ symma:=0;
+ pdel:=0;
+  repeat
+   Write('Введите n: ');
+   Readln(str);
+   Val(Str, p, Code);
+   if Code<>0 then Writeln('Неправильный ввод! Ошибка в позиции: ',Code) Else Writeln('Ok!');
+  until Code = 0;
+ n:=p;
+ for i:=2 to n do begin
+                    for k:=2 to i do begin           {проверяем простое ли это число}
+                    if i mod k = 0 then pdel:=pdel+1;
+                                     end;
+                    if pdel=1 then symma:=symma+i;   {т.е. оно делится только на себя(и 1)}
+                    if pdel=1 then Write(i,' ');
+                                     pdel:=0;
+                  end;
+Writeln;
+Writeln(symma);
+Write('Ещё раз(y/n)? ');
+Readln(yn);
+until yn='n';
+End.

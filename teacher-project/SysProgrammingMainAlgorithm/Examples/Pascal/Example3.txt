@@ -1,0 +1,50 @@
+program MaximuM;
+const
+     m = 7;	{строки}
+     n = 4;	{столбцы}
+var
+ Matrix: array[1..m, 1..n] of integer;	{двумерный массив}
+ i,j,max,smax: integer;	{max - максимальный элемент; smax - строка, в которой max}
+
+Begin
+
+Writeln('Матрица:');
+
+max:= -41;
+smax:= 1;
+
+Randomize;
+for i:=1 to m do begin	{задание и вывод массива, поиск максимального элемента}
+ for j:=1 to n do begin
+                  Matrix[i, j]:=Random(71)-40;	{задаём массив числами от -40 до 30}
+                  Write( (Matrix[i, j]):4 );
+                  if (Matrix[i, j] > max) then	{как только нашли элемент строго больше max}
+                      begin
+                      max:= Matrix[i, j];	{сохраняем его в max}
+                      smax:= i;			{и номер его строки в smax}
+                      end;
+                  end;
+                 Writeln;
+                 end;
+Writeln('Максимальный элемент ', max,' в строке ',smax,':');
+
+Writeln('Новая матрица:');
+
+for i:= m downto smax+1 do begin	{цикл строкам m,m-1,...,smax+1}
+ for j:=1 to n do begin
+      if (i = smax + 1) then Matrix[i, j]:= Matrix[1, j] else
+      if smax <> m then Matrix[i, j]:= Matrix[i-1, j];{если не в последней строке}
+{строки от smax+1 до m сдвигаем вниз, последнюю строку теряем}
+{в строку, следующей за строкой smax записываем элементы первой строки}
+                  end;
+                 end;
+
+for i:=1 to m do begin	{цикл по всем элементам массива}
+ for j:=1 to n do begin
+      Write( (Matrix[i, j]):4 );
+                  end;
+      Writeln;
+                 end;
+
+Readln;
+End.

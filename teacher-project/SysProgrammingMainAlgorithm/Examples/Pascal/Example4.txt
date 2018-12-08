@@ -1,0 +1,25 @@
+rogram sin_teilor;
+var x,stx,sint,e: real;
+    i,fakt,z: integer;
+Begin
+Write('Введите x: ');
+Readln(x);
+Write('Введите точность e: ');
+Readln(e);
+ stx:= x;  {x в степени}
+ fakt:= 1;  {значение факториала в знаменателе}
+ sint:= 0;  {первый элемент в разложении}
+ i:= 1;  {счётчик}
+ z:= 1;  {знак элемента}
+while stx/fakt>=e do begin  {до тех пор, пока элемент в разложении не меньше точности}
+                      sint:=sint+z*stx/fakt;
+                      inc(i,2);
+                      stx:=stx*x*x;
+                      fakt:=fakt*(i-1)*i;
+                      z:=z*(-1);  {смена знака}
+                      end;
+Writeln('Количество элементов в разложении = ',i div 2);
+Writeln('Значение sin(',x:6:6,')= ',sint:6:6);
+Writeln('Значение компьютера: ',sin(x):6:6);
+Readln;
+End.

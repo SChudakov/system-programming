@@ -1,0 +1,25 @@
+program lnx_teilor;
+var x,stx,lnt,e: real;
+    i,fakt,z: integer;
+Begin
+Write('Введите 1 < x < 2: ');
+Readln(x);
+Write('Введите точность e: ');
+Readln(e);
+ stx:= x-1;  {x в степени}
+ fakt:= 1;  {значение знаменателя}
+ lnt:= 0;  {первый элемент в разложении}
+ i:= 1;  {счётчик}
+ z:= 1;  {знак элемента}
+while stx/fakt>=e do begin  {до тех пор, пока элемент в разложении не меньше точности}
+                      lnt:=lnt+z*stx/fakt;
+                      inc(i);
+                      stx:=stx*(x-1);
+                      fakt:=i;
+                      z:=z*(-1);  {смена знака}
+                      end;
+Writeln('Количество элементов в разложении = ',i);
+Writeln('Значение ln(',x:6:6,')= ',lnt:6:6);
+Writeln('Значение компьютера: ',ln(x):6:6);
+Readln;
+End.

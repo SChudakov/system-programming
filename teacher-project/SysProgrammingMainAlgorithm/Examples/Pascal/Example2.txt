@@ -1,0 +1,34 @@
+program prosto_deliteli;
+uses crt;
+var n,i,symma,k,pdel:integer;
+    P, Code : Integer;
+    Str: string;
+    yn:string;
+Begin
+clrscr;
+repeat
+ symma:=0;
+ pdel:=0;
+  repeat
+   Write('Введите n: ');
+   Readln(str);
+   Val(Str, p, Code);
+   if Code<>0 then Writeln('Неправильный ввод! Ошибка в позиции: ',Code) Else Writeln('Ok!');
+  until Code = 0;
+ n:=P;
+ for i:=2 to n do begin
+                  if n mod i = 0 then begin    {если делитель}
+                    for k:=2 to i do begin      {проверяем простой ли он}
+                    if i mod k = 0 then pdel:=pdel+1;
+                                     end;
+                    if pdel=1 then symma:=symma+i;   {т.е. у него 1 делитель(он сам)}
+                    if pdel=1 then Write(i,' ');
+                                     pdel:=0;
+                                     end;
+                 end;
+Writeln;
+Writeln(symma);
+Write('Ещё раз(y/n)? ');
+Readln(yn);
+until yn='n';
+End.

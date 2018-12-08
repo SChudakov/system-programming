@@ -1,0 +1,27 @@
+#include <iostream> // для использования std::cout
+#include <vector> // для std::vector<>
+#include <map> // для std::map<> и std::pair<>
+#include <algorithm> // для std::for_each()
+#include <string> // для std::string
+ 
+using namespace std; // используем пространство имён "std"
+ 
+void display_item_count(pair< string const, vector<string> > const& person) {
+ // person - это пара двух объектов: person.first - это его имя,
+ // person.second - это список его предметов (вектор строк)
+ cout << person.first << " is carrying " << person.second.size() << " items" << endl;
+}
+ 
+int main()
+{
+ // объявляем карту со строковыми ключами и данными в виде векторов строк
+ map< string, vector<string> > items;
+ 
+ // Добавим в эту карту пару человек и дадим им несколько предметов
+ items["Anya"].push_back("scarf");
+ items["Dimitri"].push_back("tickets");
+ items["Anya"].push_back("puppy");
+ 
+ // Переберём все объекты в контейнере
+ for_each(items.begin(), items.end(), display_item_count);
+}
